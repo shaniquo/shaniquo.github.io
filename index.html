@@ -1,4 +1,4 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en-US">
   <head>
     <meta charset="UTF-8">
@@ -339,8 +339,8 @@
             <div class="h6"><a class="nav-link"  title="Email" href="mailto:shaniquo-m@hotmail.com?cc=shaniquom@gmail.com&bcc=smcken32@my.centennialcollege.ca&subject=Employment%20Opportunity%20Or%20General%20Enquiry&body=Hi%20Shaniquo,%0D%0DI%20would%20like%20to%20contact%20you%20regarding%20a%20new%20opportunity.%0D%0D%0AYou%20can%20contact%20me%20at%3A%20%0D%0D%0ARegards%0D%0A"><i class="far fa-envelope pe-2 text-muted" style="width:24px;opacity:0.85;"></i> shaniquo-m@hotmail.com</a></div>
           </div>
           <div class="mt-5 d-print-none">
-            <form action="mailto:shaniquo-m@hotmail.com?cc=shaniquom@gmail.com&bcc=smcken32@my.centennialcollege.ca"
-                method="POST" enctype="multipart/form-data" name="EmailForm">
+            <form 
+                method="POST" enctype="multipart/form-data" name="EmailForm" id="EmailForm">
               <div class="form-outline mb-4">
                 <input type="text" id="name" name="name" class="form-control" required/>
                 <label class="form-label" for="name">Name</label>
@@ -350,20 +350,24 @@
                 <label class="form-label" for="email">Email Address</label>
               </div>
               <div class="form-outline mb-4">
+                <input type="text" id="phone" name="phone" class="form-control" placeholder="Optional" onInput="this.value = phoneFormat(this.value)"/>
+                <label class="form-label" for="phone">Phone</label>
+              </div>
+              <div class="form-outline mb-4">
                 <input type="text" id="subject" name="subject"  class="form-control" required/>
                 <label class="form-label" for="subject">Subject</label>
               </div>
               <div class="form-outline mb-4">
-                <textarea class="form-control" name="message"  style="resize: none;" id="message" rows="4" required></textarea>
+                <textarea class="form-control" name="message"  style="resize: none; white-space: pre-wrap;" id="message" rows="4" required></textarea>
                 <label class="form-label" for="message">Message</label>
               </div>
-              <button class="btn btn-info btn-block mb-4" type="submit">Send</button>
+              <button class="btn btn-info btn-block mb-4" type="submit" id="contactSubmitBtn">Send</button>
             </form>
           </div>
         </div>
         <div class="col-md-7 d-print-none" data-aos="zoom-in" data-aos-delay="100">
           <iframe src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q=lawrence%20ave%20west%20at%20Jane%20st+(Your%20Business%20Name)&amp;t=&amp;z=17&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
-            width="500" height="500" style="border:0;width:100%;" allowfullscreen="" loading="lazy"></iframe>
+            width="500" height="550" style="border:0;width:100%;" allowfullscreen="" loading="lazy"></iframe>
         </div>
       </div>
     </div>
@@ -398,5 +402,62 @@
     <script src="scripts/mdb.min.js?ver=1.2.1"></script>
     <script src="scripts/aos.js?ver=1.2.1"></script>
     <script src="scripts/main.js?ver=1.2.1"></script>
+    <script language="JavaScript" type="text/javascript">
+      //"mailto:shaniquo-m@hotmail.com?cc=shaniquom@gmail.com&bcc=smcken32@my.centennialcollege.ca&subject=Employment%20Opportunity%20Or%20General%20Enquiry&body=Hi%20Shaniquo,%0D%0DI%20would%20like%20to%20contact%20you%20regarding%20a%20new%20opportunity.%0D%0D%0AYou%20can%20contact%20me%20at%3A%20%0D%0D%0ARegards%0D%0A
+      //'mailto:'+ my_email+'&subject='+ subject.value + '&body=%0D%0D%0AName:'+ your_name.value +'%0D%0D%0A'+ message.value
+      var my_email = "shaniquo-m@hotmail.com?cc=shaniquom@gmail.com&bcc=smcken32@my.centennialcollege.ca";
+      var your_name = document.getElementById("name");
+      var your_phone = document.getElementById("phone");
+      var email_address = document.getElementById("email");
+      var subject = document.getElementById("subject");
+      var messageBox = document.getElementById("message");
+      var contact_form =  document.getElementById("EmailForm");
+      var submit_button = document.getElementById("contactSubmitBtn");
+      var message = '';
+
+      function phoneFormat(input) {//returns (###) ###-####
+          input = input.replace(/\D/g,'');
+          var size = input.length;
+          if (size>0) {input="("+input}
+          if (size>3) {input=input.slice(0,4)+") "+input.slice(4,11)}
+          if (size>6) {input=input.slice(0,9)+"-" +input.slice(9)}
+          return input;
+      }
+
+      function validatePhone(){
+        is_valid_phone = false;
+
+        var phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+        if(your_phone.value.match(phoneno))
+          {
+            is_valid_phone = true;
+        }
+        else
+          {
+         // alert("Not a valid Phone Number");
+          is_valid_phone = false;
+          }
+
+          return is_valid_phone;
+      }
+
+
+      function add_email_action() {
+        //formats the testarea value to add hte new line characters
+        message = messageBox.value.replace(/(\r\n|\n|\r)/gm, '%0D%0D%0A');
+        is_valid_phone = validatePhone();
+        if (is_valid_phone){
+          contact_form.action = 'mailto:'+ my_email+'&subject='+ subject.value + '&body=%0D%0D%0AName:%20'+ your_name.value + '%0D%0D%0APhone%20Number:%20'+ your_phone.value +'%0D%0D%0A'+ message;
+        }else{
+          contact_form.action = 'mailto:'+ my_email+'&subject='+ subject.value + '&body=%0D%0D%0AName:%20'+ your_name.value +'%0D%0D%0A'+ message;
+        }
+
+      }
+
+      submit_button.addEventListener("click", function () {
+        add_email_action();
+        form.submit();
+      });
+      </script>
   </body>
 </html>
